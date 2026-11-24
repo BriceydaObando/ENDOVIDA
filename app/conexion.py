@@ -1,3 +1,4 @@
+
 import os
 
 
@@ -14,17 +15,13 @@ def obtener_conexion():
 
     # Conexion a PostgreSQL en Neon
     if database_url:
-        from urllib.parse import urlsplit
         import psycopg
 
-        consulta = urlsplit(database_url).query
+        # Reconstruir los parametros de conexion de Neon
+        database_url = database_url.split("?", 1)[0]
+        database_url += "?sslmode=require&channel_binding=require"
 
-        diagnostico = [
-            (parte.split("=", 1)[0], parte.count("="))
-            for parte in consulta.split("&")
-        ]
-
-        print("DIAGNOSTICO DATABASE_URL:", diagnostico)
+        print("DATABASE_URL: parametros de conexion corregidos")
 
         return psycopg.connect(database_url)
 
