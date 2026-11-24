@@ -1,4 +1,3 @@
-
 import os
 
 
@@ -15,7 +14,18 @@ def obtener_conexion():
 
     # Conexion a PostgreSQL en Neon
     if database_url:
+        from urllib.parse import urlsplit
         import psycopg
+
+        consulta = urlsplit(database_url).query
+
+        diagnostico = [
+            (parte.split("=", 1)[0], parte.count("="))
+            for parte in consulta.split("&")
+        ]
+
+        print("DIAGNOSTICO DATABASE_URL:", diagnostico)
+
         return psycopg.connect(database_url)
 
     # Conexion local a SQL Server
