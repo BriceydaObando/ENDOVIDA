@@ -42,7 +42,7 @@ def obtener_seguimientos():
         ejecutar_consulta(cursor, """
             SELECT s.id_seguimiento, p.nombre, p.apellido,
                    ps.nombre, ps.apellido, s.fecha,
-                   s.observacion, s.estado
+                   s.observaciones, s.estado
             FROM SEGUIMIENTO s
             INNER JOIN PACIENTES p
                 ON s.id_paciente = p.id_paciente
