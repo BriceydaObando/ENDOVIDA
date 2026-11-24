@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Seguimiento - EndoVida{% endblock %}
+
+{% block contenido %}
+
+<main>
+    <h1>Seguimiento de casos</h1>
+
+    <p>
+        Registra y consulta información relacionada con el seguimiento
+        de los casos de endometriosis.
+    </p>
+
+    <h2>Registrar nuevo seguimiento</h2>
+
+    {% if mensaje %}
+        <p>{{ mensaje }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <label for="id_paciente">Paciente:</label>
+        <select id="id_paciente" name="id_paciente" required>
+            <option value="">Selecciona un paciente</option>
+
+           {% for paciente in pacientes %}
+    <option value="{{ paciente[0] }}">
+        ID {{ paciente[0] }} - {{ paciente[1] }} {{ paciente[2] }} - Documento: {{ paciente[3] }}
+    </option>
+{% endfor %}
+        </select>
+
+        <br><br>
+
+        <label for="id_personal">Personal de salud:</label>
+        <select id="id_personal" name="id_personal" required>
+            <option value="">Selecciona el personal de salud</option>
+
+            {% for persona in personal %}
+                <option value="{{ persona[0] }}">
+                    {{ persona[1] }} {{ persona[2] }} - {{ persona[3] }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <br><br>
+
+        <label for="observaciones">Observaciones:</label>
+        <textarea
+            id="observaciones"
+            name="observaciones"
+            rows="4"
+            required
+        ></textarea>
+
+        <br><br>
+
+        <label for="estado">Estado:</label>
+        <select id="estado" name="estado" required>
+           <option value="">Selecciona un estado</option>
+           <option value="Activo">Activo</option>
+           <option value="En seguimiento">En seguimiento</option>
+           <option value="En proceso">En proceso</option>
+           <option value="Completado">Completado</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Registrar seguimiento</button>
+
+    </form>
+
+    <h2>Seguimientos registrados</h2>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID Seguimiento</th>
+                <th>ID Paciente</th>
+                <th>ID Personal</th>
+                <th>Fecha</th>
+                <th>Observaciones</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for seguimiento in seguimientos %}
+            <tr>
+                <td>{{ seguimiento[0] }}</td>
+                <td>{{ seguimiento[1] }}</td>
+                <td>{{ seguimiento[2] }}</td>
+                <td>{{ seguimiento[3] }}</td>
+                <td>{{ seguimiento[4] }}</td>
+                <td>{{ seguimiento[5] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No hay seguimientos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</main>
+
+{% endblock %}

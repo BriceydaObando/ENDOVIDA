@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Registro - EndoVida{% endblock %}
+
+{% block contenido %}
+
+<main>
+    <h1>Registro de usuario</h1>
+
+    <p>Crea una cuenta para acceder al sistema EndoVida.</p>
+
+    <form method="POST">
+
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" required>
+
+        <br><br>
+
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required>
+
+        <br><br>
+
+        <button type="submit">Registrarse</button>
+
+    </form>
+
+    <br>
+
+    <a href="/login">¿Ya tienes una cuenta? Inicia sesión</a>
+</main>
+
+{% endblock %}

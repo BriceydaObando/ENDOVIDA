@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Reportes - EndoVida{% endblock %}
+
+{% block contenido %}
+
+<main>
+
+    <h1>Gestión de reportes</h1>
+
+    <p>
+        En este módulo se pueden registrar y consultar reportes
+        relacionados con la información almacenada en EndoVida.
+    </p>
+
+    <h2>Registrar nuevo reporte</h2>
+
+    {% if mensaje %}
+        <p>{{ mensaje }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <label for="id_paciente">Paciente:</label>
+        <select id="id_paciente" name="id_paciente" required>
+            <option value="">Selecciona un paciente</option>
+
+            {% for paciente in pacientes %}
+                <option value="{{ paciente[0] }}">
+                    ID {{ paciente[0] }} -
+                    {{ paciente[1] }} {{ paciente[2] }} -
+                    Documento: {{ paciente[3] }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        <label for="fecha">Fecha del reporte:</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <br><br>
+
+        <label for="tiempo_reporte">Tiempo del reporte:</label>
+<input
+    type="text"
+    id="tiempo_reporte"
+    name="tiempo_reporte"
+    placeholder="Ejemplo: 10 minutos"
+    maxlength="50"
+    required
+>
+
+        <br><br>
+
+        <label for="descripcion">Descripción:</label>
+
+        <textarea
+            id="descripcion"
+            name="descripcion"
+            rows="4"
+            maxlength="500"
+            required
+        ></textarea>
+
+        <br><br>
+
+        <button type="submit">Registrar reporte</button>
+
+    </form>
+
+    <h2>Reportes registrados</h2>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>ID Reporte</th>
+                <th>ID Paciente</th>
+                <th>Fecha</th>
+                <th>Periodicidad</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for reporte in reportes %}
+
+            <tr>
+                <td>{{ reporte[0] }}</td>
+                <td>{{ reporte[1] }}</td>
+                <td>{{ reporte[2] }}</td>
+                <td>{{ reporte[3] }}</td>
+                <td>{{ reporte[4] }}</td>
+            </tr>
+
+            {% else %}
+
+            <tr>
+                <td colspan="5">No hay reportes registrados.</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</main>
+
+{% endblock %}

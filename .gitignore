@@ -1,0 +1,17 @@
+﻿venv/
+.venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+*.bak
+*.mdf
+*.ldf
+*.db
+*.sqlite3
+probar_*.py
+migrar_contrasenas.py
+restablecer_*.py
+app/rutas_respaldo.py
+app/USE EndoVida;.sql
