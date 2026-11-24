@@ -1,19 +1,17 @@
-
-
 import os
-
 
 
 def obtener_conexion():
     database_url = os.environ.get("DATABASE_URL")
 
-    # Conexión a PostgreSQL en Neon
+    # Conexion a PostgreSQL en Neon
     if database_url:
         import psycopg
         return psycopg.connect(database_url)
 
-    # Conexión local a SQL Server
-      import pyodbc
+    # Conexion local a SQL Server
+    import pyodbc
+
     conexion = pyodbc.connect(
         r"DRIVER={ODBC Driver 18 for SQL Server};"
         r"SERVER=(localdb)\MSSQLLocalDB;"
