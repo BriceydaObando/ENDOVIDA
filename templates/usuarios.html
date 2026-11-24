@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de usuarios - EndoVida{% endblock %}
+
+{% block contenido %}
+
+<main>
+    <h1>Gestión de usuarios</h1>
+
+    <p>Consulta y administra los usuarios registrados en EndoVida.</p>
+
+    {% if mensaje %}
+        <p>{{ mensaje }}</p>
+    {% endif %}
+
+    <h2>Usuarios registrados</h2>
+
+    {% if usuarios %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID Usuario</th>
+                <th>Nombre de usuario</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario[0] }}</td>
+                    <td>{{ usuario[1] }}</td>
+                    <td>
+                        {% if usuario[0] != session.get("id_usuario") %}
+                             <form method="POST">
+                                <input
+                                    type="hidden"
+                                    name="id_usuario"
+                                    alue="{{ usuario[0] }}"
+                                    >
+                                <button type="submit">
+                                    Eliminar
+                                </button>
+                                </form>
+                            {% else %}
+                                Sesión activa
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay usuarios registrados.</p>
+    {% endif %}
+
+</main>
+
+{% endblock %}

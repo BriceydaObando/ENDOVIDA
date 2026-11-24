@@ -11,6 +11,7 @@ def obtener_pacientes():
             SELECT id_paciente, nombre, apellido, documento,
                    edad, correo, telefono
             FROM PACIENTES
+            ORDER BY id_paciente
         """)
         return cursor.fetchall()
     finally:
@@ -39,9 +40,15 @@ def obtener_seguimientos():
     try:
         cursor = conexion.cursor()
         ejecutar_consulta(cursor, """
-            SELECT id_seguimiento, id_paciente, id_personal,
-                   fecha, observaciones, estado
-            FROM SEGUIMIENTO
+            SELECT s.id_seguimiento, p.nombre, p.apellido,
+                   ps.nombre, ps.apellido, s.fecha,
+                   s.observacion, s.estado
+            FROM SEGUIMIENTO s
+            INNER JOIN PACIENTES p
+                ON s.id_paciente = p.id_paciente
+            INNER JOIN PERSONAL_SALUD ps
+                ON s.id_personal = ps.id_personal
+            ORDER BY s.id_seguimiento
         """)
         return cursor.fetchall()
     finally:
@@ -53,23 +60,24 @@ def obtener_personal_salud():
     try:
         cursor = conexion.cursor()
         ejecutar_consulta(cursor, """
-            SELECT id_personal, nombre, apellido, cargo
+            SELECT id_personal, nombre, apellido
             FROM PERSONAL_SALUD
+            ORDER BY nombre
         """)
         return cursor.fetchall()
     finally:
         conexion.close()
 
 
-def registrar_seguimiento(id_paciente, id_personal, fecha, observaciones, estado):
+def registrar_seguimiento(id_paciente, id_personal, fecha, observacion, estado):
     conexion = obtener_conexion()
     try:
         cursor = conexion.cursor()
         ejecutar_consulta(cursor, """
             INSERT INTO SEGUIMIENTO
-            (id_paciente, id_personal, fecha, observaciones, estado)
+            (id_paciente, id_personal, fecha, observacion, estado)
             VALUES (?, ?, ?, ?, ?)
-        """, (id_paciente, id_personal, fecha, observaciones, estado))
+        """, (id_paciente, id_personal, fecha, observacion, estado))
         conexion.commit()
     except Exception:
         conexion.rollback()
@@ -83,9 +91,12 @@ def obtener_reportes():
     try:
         cursor = conexion.cursor()
         ejecutar_consulta(cursor, """
-            SELECT id_reporte, id_paciente, fecha,
-                   tiempo_reporte, descripcion
-            FROM REPORTE
+            SELECT r.id_reporte, p.nombre, p.apellido,
+                   r.fecha, r.tiempo_reporte, r.descripcion
+            FROM REPORTE r
+            INNER JOIN PACIENTES p
+                ON r.id_paciente = p.id_paciente
+            ORDER BY r.id_reporte
         """)
         return cursor.fetchall()
     finally:
@@ -122,5 +133,36 @@ def registrar_usuario(usuario, contrasena):
     except Exception:
         conexion.rollback()
         raise
+    finally:
+        conexion.close()
+
+
+def eliminar_usuario(id_usuario):
+    conexion = obtener_conexion()
+    try:
+        cursor = conexion.cursor()
+        ejecutar_consulta(
+            cursor,
+            "DELETE FROM USUARIOS WHERE id_usuario = ?",
+            (id_usuario,)
+        )
+        conexion.commit()
+    except Exception:
+        conexion.rollback()
+        raise
+    finally:
+        conexion.close()
+
+
+def obtener_usuarios():
+    conexion = obtener_conexion()
+    try:
+        cursor = conexion.cursor()
+        ejecutar_consulta(cursor, """
+            SELECT id_usuario, usuario
+            FROM USUARIOS
+            ORDER BY id_usuario
+        """)
+        return cursor.fetchall()
     finally:
         conexion.close()

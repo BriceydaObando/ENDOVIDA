@@ -21,8 +21,11 @@ from app.modelos import (
     registrar_usuario,
     obtener_personal_salud,
     registrar_seguimiento,
-    registrar_reporte
+    registrar_reporte,
+    obtener_usuarios,
+    eliminar_usuario
 )
+
 
 
 def login_requerido(funcion):
@@ -233,5 +236,32 @@ def reportes():
         "reportes.html",
         pacientes=pacientes,
         reportes=reportes,
+        mensaje=mensaje
+    )
+
+@app.route("/usuarios", methods=["GET", "POST"])
+@login_requerido
+def usuarios():
+
+    mensaje = None
+
+    if request.method == "POST":
+        try:
+            id_usuario = int(request.form["id_usuario"])
+
+            if id_usuario == session.get("id_usuario"):
+                mensaje = "No puedes eliminar el usuario con el que tienes la sesión activa."
+            else:
+                eliminar_usuario(id_usuario)
+                mensaje = "Usuario eliminado correctamente."
+
+        except ValueError:
+            mensaje = "No se pudo identificar el usuario."
+
+    usuarios_registrados = obtener_usuarios()
+
+    return render_template(
+        "usuarios.html",
+        usuarios=usuarios_registrados,
         mensaje=mensaje
     )
